@@ -3,8 +3,6 @@ services:
   postgres:
     image: docker.io/library/postgres:14
     restart: always
-    volumes:
-      - '${PWD}/volumes/postgres:/var/lib/postgresql/data'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
@@ -52,5 +50,4 @@ services:
       - '${PWD}/hasura/migrations:/hasura-migrations:ro'
       - '${PWD}/hasura/metadata:/hasura-metadata:ro'
 volumes:
-  postgres-data:
   cockroach-data:
