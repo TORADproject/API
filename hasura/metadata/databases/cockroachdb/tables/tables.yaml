@@ -1,0 +1,8 @@
+- "!include public_albums.yaml"
+- "!include public_artist_albums.yaml"
+- "!include public_artist_songs.yaml"
+- "!include public_artists.yaml"
+- "!include public_audio_encodings.yaml"
+- "!include public_playlist_songs.yaml"
+- "!include public_playlists.yaml"
+- "!include public_songs.yaml"

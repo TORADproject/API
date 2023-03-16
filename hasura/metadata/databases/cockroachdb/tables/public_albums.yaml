@@ -1,0 +1,18 @@
+table:
+  name: albums
+  schema: public
+array_relationships:
+  - name: artist_albums
+    using:
+      foreign_key_constraint_on:
+        column: album_id
+        table:
+          name: artist_albums
+          schema: public
+  - name: songs
+    using:
+      foreign_key_constraint_on:
+        column: album_id
+        table:
+          name: songs
+          schema: public

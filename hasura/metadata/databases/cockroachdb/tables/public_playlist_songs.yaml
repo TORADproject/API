@@ -1,0 +1,7 @@
+table:
+  name: playlist_songs
+  schema: public
+object_relationships:
+  - name: song
+    using:
+      foreign_key_constraint_on: song_id

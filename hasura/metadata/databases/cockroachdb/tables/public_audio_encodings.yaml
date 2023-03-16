@@ -1,0 +1,3 @@
+table:
+  name: audio_encodings
+  schema: public
