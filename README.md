@@ -16,7 +16,7 @@ CockroachDB database.
 2. `cd hasura`
 3. `hasura console` (keep running)
 
-## To create an SQL migration:
+## To create a(n) SQL migration:
 
 1. Make sure the development server is running (`compose.yaml`, `hasura console`)
 2. `hasura migrate create <migration-name>`
@@ -103,3 +103,16 @@ playlist_songs  -->  playlists : playlist_id>id
 playlist_songs  -->  songs : song_id>id
 songs  -->  albums : album_id>id
 ```
+
+# Container Image
+
+Images are automatically built by Github Actions on each new Git tag push.
+
+`cr.srock.cc/torad/api-config`
+
+The image copies the `hasura/migrations` and `hasura/metadata` to `/mnt`, creating `/mnt/migrations`
+and `/mnt/metadata`. Create volume mounts in those locations as appropriate.
+
+It's expected that this container is deployed in the same pod as
+a `docker.io/hasura/graphql-engine:<version>.cli-migrations-v3` container as an init container. That way the Hasura
+container may mount the same container volumes, allowing it to be configured automatically.
