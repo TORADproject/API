@@ -1,7 +1,13 @@
-version: '3.6'
+version: '3.9'
 services:
   postgres:
+    privileged: true
     image: docker.io/library/postgres:14
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "postgres", "-U", "postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -9,6 +15,7 @@ services:
 
   ## Hasura is compatible with CockroachDB 22.2 onwards
   cockroach:
+    privileged: true
     image: docker.io/cockroachdb/cockroach:v22.2.1
     # starts an _insecure_, single-node CockroachDB intended for non-production uses only
     # follow the CockroachDB Cloud Guide to connect to a production CockroachDB cluster
@@ -18,6 +25,12 @@ services:
       - --accept-sql-without-tls
     ports:
       - '26257:26257'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/api/v2/databases/torad/" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: always
     environment:
       COCKROACH_USER: 'root'
       COCKROACH_DATABASE: 'torad'
@@ -25,12 +38,15 @@ services:
       - '${PWD}/volumes/cockroach:/cockroach/cockroach-data'
 
   graphql-engine:
+    privileged: true
     image: docker.io/hasura/graphql-engine:v2.20.0.cli-migrations-v3
     ports:
       - '8080:8080'
     depends_on:
-      - 'postgres'
-      - 'cockroach'
+      postgres:
+        condition: service_healthy
+      cockroach:
+        condition: service_healthy
     restart: always
     environment:
       ## postgres database to store Hasura metadata
